@@ -1,0 +1,66 @@
+,supplier_name,Abs405,ID,FG_ID,ST,species,CHL.disc.diffusion,CHL.MIC,R.S,Match.disk_MIC,rapid.CAT,comment,PCR.amplicons.correct.,PCR.amplicon.issue,long.read.seq...re.seq.short.read,Correct.isolate.,CatA1,CatB4,CmlA1,CatA2,CatB3,Cat_pC221,CmlA5,floR,Tot_cat,order,cat_genes,Tot_catA,Tot_catB
+3,CAB184,0.006,2,2_CAB184,44,E. coli,Sensitive,8,S,1,0,,1," faint high catA1, catB correct",,,1,1,0,0,0,0,0,0,2,A,catA1 + catB4,1,1
+4,CAB184,0.005,2,2_CAB184,44,E. coli,Sensitive,8,S,1,0,,1," faint high catA1, catB correct",,,1,1,0,0,0,0,0,0,2,A,catA1 + catB4,1,1
+5,CAB184,-0.0255,2,2_CAB184,44,E. coli,Sensitive,8,S,1,0,,1," faint high catA1, catB correct",,,1,1,0,0,0,0,0,0,2,A,catA1 + catB4,1,1
+9,CAI10Z,0.011,4,4_CAI10Z,Novel,E. coli,Sensitive,4,S,1,0,,0,"catA1 correct, no catB amplicon",,,1,1,0,0,0,0,0,0,2,A,catA1 + catB4,1,1
+10,CAI10Z,0.001,4,4_CAI10Z,Novel,E. coli,Sensitive,4,S,1,0,,0,"catA1 correct, no catB amplicon",,,1,1,0,0,0,0,0,0,2,A,catA1 + catB4,1,1
+11,CAE137,1.101,5,5_CAE137,648,E. coli,Resistant,512,R,1,1,different colony morphologies on the 1st LB plate. Streaked  both  on chromagar -  both came up green(Klebsiella) - PCR confirmed E.coli for both. 1 frozed from each morphology. ,1,,y,"yes, long-read calls catA1 and B3",1,0,0,0,1,0,0,0,2,B,catA1 + catB3,1,1
+12,CAE137,2.259,5,5_CAE137,648,E. coli,Resistant,512,R,1,1,different colony morphologies on the 1st LB plate. Streaked  both  on chromagar -  both came up green(Klebsiella) - PCR confirmed E.coli for both. 1 frozed from each morphology. ,1,,y,"yes, long-read calls catA1 and B3",1,0,0,0,1,0,0,0,2,B,catA1 + catB3,1,1
+13,CAE137,1.621,5,5_CAE137,648,E. coli,Resistant,512,R,1,1,different colony morphologies on the 1st LB plate. Streaked  both  on chromagar -  both came up green(Klebsiella) - PCR confirmed E.coli for both. 1 frozed from each morphology. ,1,,y,"yes, long-read calls catA1 and B3",1,0,0,0,1,0,0,0,2,B,catA1 + catB3,1,1
+14,CAC10A,5.00E-04,23,23_CAC10A,167,E. coli,Resistant,16,R,1,0,repeat with high input plus CHL before DTNB remains negative,1,,y,,1,0,0,0,0,0,0,0,1,D,catA1,1,0
+15,CAC10A,0.025,23,23_CAC10A,167,E. coli,Resistant,16,R,1,0,repeat with high input plus CHL before DTNB remains negative,1,,y,,1,0,0,0,0,0,0,0,1,D,catA1,1,0
+17,CAI10X,-0.002,7,7_CAI10X,167,E. coli,Sensitive,8,S,1,0,,1,high band,,,1,0,0,0,0,0,0,0,1,D,catA1,1,0
+18,CAI10X,-0.005,7,7_CAI10X,167,E. coli,Sensitive,8,S,1,0,,1,high band,,,1,0,0,0,0,0,0,0,1,D,catA1,1,0
+19,CAM10K,0.004,8,8_CAM10K,443,E. coli,Sensitive,4,S,1,0,mixed colonies on the chromagar plate. One of each colour re-streaked onto new chromagar: one green and one blue – the blue (E. coli - Brilliance ESBL chromagar E. coli are pink or blue! Klebs are green!) frozen.  PCR confirmed E. coli of the one forzen,1,high band,,,1,0,0,0,0,0,0,0,1,D,catA1,1,0
+20,CAI10E,0.006,9,9_CAI10E,167,E. coli,Resistant,8,S,0,0,MIC reapeat confirms,0,no catA1 HRM amplicon but ORF,y (s),"correct isolate, does not amplify catA1 (wgs data catA1 locus identical to #7, i.e. no primer mismatch); re-iSeq calls catA1 - PCR calls catA1 with ORF primers",1,0,0,0,0,0,0,0,1,D,catA1,1,0
+24,CAD110,2.3805,11,11_CAD110,424,E. coli,Resistant,512,R,1,1,"rapidCATassay repeated, also with CHL in o/n - also negative. But assay repeat with adding CHL before DTNB give small signal! r-CAT with signal with high biomass input and CHL before DTNB",1,,y,"correct, LR calls A2,B4,cmlA",0,1,0,1,0,0,1,0,2,C,catA2 + catB4 ,1,1
+27,CAG10A,0.2,13,13_CAG10A,46,E. coli,Sensitive,16,R,0,1,MIC reapeat confirms. Minor signal in r-CAT with high biomass input and CHL before DTNB,1,,,,0,0,0,0,1,0,0,0,1,F,catB3,0,1
+28,CAI104,0.1785,14,14_CAI104,46,E. coli,Sensitive,16,R,0,1,MIC reapeat confirms. Minor signal in r-CAT with high biomass input and CHL before DTNB,1,,,,0,0,0,0,1,0,0,0,1,F,catB3,0,1
+29,CAD10B,0.8935,15,15_CAD10B,46,E. coli,Resistant,16,R,1,1,"rapidCATassay repeated, also with CHL in o/n - also negative. But r-CAT with signal with high biomass input and CHL before DTNB",1,,y,LR calls catB3,0,0,0,0,1,0,0,0,1,F,catB3,0,1
+30,CAD105,0.294,16,16_CAD105,46,E. coli,Resistant,16,R,1,1,Minor signal in r-CAT with high biomass input and CHL before DTNB,1,,,,0,0,0,0,1,0,0,0,1,F,catB3,0,1
+31,CAC124,-0.008,17,17_CAC124,131,E. coli,Sensitive,8,S,1,0,repeat with high input plus CHL before DTNB remains negative,1,,y,LR calls B4,0,1,0,0,0,0,0,0,1,G,catB4 ,0,1
+32,CAC124,-0.0755,17,17_CAC124,131,E. coli,Sensitive,8,S,1,0,repeat with high input plus CHL before DTNB remains negative,1,,y,LR calls B4,0,1,0,0,0,0,0,0,1,G,catB4 ,0,1
+34,CAE12L,0.034,19,19_CAE12L,44,E. coli,Sensitive,8,S,1,0,,1,,,,0,1,0,0,0,0,0,0,1,G,catB4 ,0,1
+41,CAB199,-0.006,24,24_CAB199,44,E. coli,Resistant,128,R,1,0,repreat confirms MIC. repeat with high input plus CHL before DTNB remains negative. D-CAT also negative.,1,,,,0,1,0,0,0,0,0,1,1,G,catB4 ,0,1
+42,CAB199,-0.02,24,24_CAB199,44,E. coli,Resistant,128,R,1,0,repreat confirms MIC. repeat with high input plus CHL before DTNB remains negative. D-CAT also negative.,1,,,,0,1,0,0,0,0,0,1,1,G,catB4 ,0,1
+43,CAB199,-0.103,24,24_CAB199,44,E. coli,Resistant,128,R,1,0,repreat confirms MIC. repeat with high input plus CHL before DTNB remains negative. D-CAT also negative.,1,,,,0,1,0,0,0,0,0,1,1,G,catB4 ,0,1
+44,CAB199,-0.011,24,24_CAB199,44,E. coli,Resistant,128,R,1,0,repreat confirms MIC. repeat with high input plus CHL before DTNB remains negative. D-CAT also negative.,1,,,,0,1,0,0,0,0,0,1,1,G,catB4 ,0,1
+49,CAJ10A,-0.0075,27,27_CAJ10A,131,E. coli,Sensitive,4,S,1,0,repeat with high input plus CHL before DTNB remains negative,NA,not tested,y,LR no CHR_r genes,0,0,0,0,0,0,0,0,0,H,no cat,0,0
+50,CAJ10A,0.02,27,27_CAJ10A,131,E. coli,Sensitive,4,S,1,0,repeat with high input plus CHL before DTNB remains negative,NA,not tested,y,LR no CHR_r genes,0,0,0,0,0,0,0,0,0,H,no cat,0,0
+54,CAN108,-0.006,31,31_CAN108,617,E. coli,Resistant,16,R,1,0,repeat with high input plus CHL before DTNB remains negative,NA,not tested,,,0,0,0,0,0,0,0,0,0,H,no cat,0,0
+55,CAN108,-0.0735,31,31_CAN108,617,E. coli,Resistant,16,R,1,0,repeat with high input plus CHL before DTNB remains negative,NA,not tested,,,0,0,0,0,0,0,0,0,0,H,no cat,0,0
+69,CAF11G,2.426,41,41_CAF11G,15,KpSC,Sensitive,512,R,0,1,"MIC reapeat confirms, stange appearance in liquind culture (o/n) - form clumps",1,,,,1,1,0,0,0,0,1,0,2,A,catA1 + catB4,1,1
+70,CAF11G,3.099,41,41_CAF11G,15,KpSC,Sensitive,512,R,0,1,"MIC reapeat confirms, stange appearance in liquind culture (o/n) - form clumps",1,,,,1,1,0,0,0,0,1,0,2,A,catA1 + catB4,1,1
+71,CAB15M,1.219,42,42_CAB15M,152,KpSC,Resistant,256,R,1,1,,1,,y,,1,1,0,0,0,0,0,0,2,A,catA1 + catB4,1,1
+72,CAB15M,1.593,42,42_CAB15M,152,KpSC,Resistant,256,R,1,1,,1,,y,,1,1,0,0,0,0,0,0,2,A,catA1 + catB4,1,1
+73,CAC11N,1.29,43,43_CAC11N,45,KpSC,Resistant,>512,R,1,1,Rapid CAT with CHL before DTNB with small signal.r-CAT with signal with high biomass input and CHL before DTNB,1,,,,0,1,0,1,0,0,1,0,2,C,catA2 + catB4 ,1,1
+74,CAE12L,2.8805,44,44_CAE12L,340,KpSC,Sensitive,>512,R,0,1,"MIC reapeat confirms (n=3). High signal in r-CAT with repeat, with biomass and DTNB after CHL. Intitial was negative but lysate looked very clear. D-CAT positive",1,,,,0,0,0,1,0,0,1,0,1,E,catA2,1,0
+75,CAE135,0.505,45,45_CAE135,340,KpSC,Resistant,>512,R,1,1,Rapid CAT with CHL before DTNB with small signal. r-CAT with signal with high biomass input and CHL before DTNB,1,,,,0,0,0,1,0,0,1,0,1,E,catA2,1,0
+76,CAE135,1.27,45,45_CAE135,340,KpSC,Resistant,>512,R,1,1,Rapid CAT with CHL before DTNB with small signal. r-CAT with signal with high biomass input and CHL before DTNB,1,,,,0,0,0,1,0,0,1,0,1,E,catA2,1,0
+77,CAF102,0.0065,46,46_CAF102,15,KpSC,Sensitive,8,S,1,0,Initial >512 (wrong isolate? Col.count >80) 2 repeats with MIC = 8,1,,y,,0,1,0,0,0,0,0,0,1,G,catB4 ,0,1
+78,CAF102,-0.025,46,46_CAF102,15,KpSC,Sensitive,8,S,1,0,Initial >512 (wrong isolate? Col.count >80) 2 repeats with MIC = 8,1,,y,,0,1,0,0,0,0,0,0,1,G,catB4 ,0,1
+80,CAC105,-0.074,48,48_CAC105,307,KpSC,Sensitive,4,S,1,0,,1,,y,,0,1,0,0,0,0,0,0,1,G,catB4 ,0,1
+84,CAC13Y,0.0115,52,52_CAC13Y,307,KpSC,Resistant,64,R,1,0,"MIC repeat 32, 3rd 64",1,,"y, y (s)",,0,1,0,0,0,0,0,0,1,G,catB4 ,0,1
+85,CAC13Y,-0.029,52,52_CAC13Y,307,KpSC,Resistant,64,R,1,0,"MIC repeat 32, 3rd 64",1,,"y, y (s)",,0,1,0,0,0,0,0,0,1,G,catB4 ,0,1
+86,CAC13Y,-0.027,52,52_CAC13Y,307,KpSC,Resistant,64,R,1,0,"MIC repeat 32, 3rd 64",1,,"y, y (s)",,0,1,0,0,0,0,0,0,1,G,catB4 ,0,1
+88,CAD137,0.006,54,54_CAD137,14,KpSC,Sensitive,4,S,1,0,,NA,not tested,,,0,0,0,0,0,0,0,0,0,H,no cat,0,0
+89,CAL11H,0.0075,55,55_CAL11H,307,KpSC,Sensitive,4,S,1,0,,NA,not tested,,,0,0,0,0,0,0,0,0,0,H,no cat,0,0
+33,CAD13N,-0.008,18,18_CAD13N,410,E. coli,Sensitive,8,S,1,0,,1,,,,0,1,0,0,0,0,0,NA,1,G,catB4 ,0,1
+37,CAC10H,0.001,22,22_CAC10H,617,E. coli,Resistant,16,R,1,0,repeat with high input plus CHL before DTNB remains negative,1,,,,0,1,0,0,0,0,0,NA,1,G,catB4 ,0,1
+38,CAC10H,-0.042,22,22_CAC10H,617,E. coli,Resistant,16,R,1,0,repeat with high input plus CHL before DTNB remains negative,1,,,,0,1,0,0,0,0,0,NA,1,G,catB4 ,0,1
+45,CAD13L,-0.008,25,25_CAD13L,410,E. coli,Resistant,8,S,0,0,MIC reapeat confirms,1,,,,0,1,0,0,0,0,0,NA,1,G,catB4 ,0,1
+46,CAC122,-0.017,26,26_CAC122,101,E. coli,Resistant,32,R,1,0,"repeat confirms MIC, faint growth at 32, could be 64! repeat with high input plus CHL before DTNB remains negative.",NA,not tested,,,0,0,1,0,0,1,0,NA,1,I,Cat_pC221,0,0
+47,CAC122,-0.016,26,26_CAC122,101,E. coli,Resistant,32,R,1,0,"repeat confirms MIC, faint growth at 32, could be 64! repeat with high input plus CHL before DTNB remains negative.",NA,not tested,,,0,0,1,0,0,1,0,NA,1,I,Cat_pC221,0,0
+48,CAC122,-0.023,26,26_CAC122,101,E. coli,Resistant,32,R,1,0,"repeat confirms MIC, faint growth at 32, could be 64! repeat with high input plus CHL before DTNB remains negative.",NA,not tested,,,0,0,1,0,0,1,0,NA,1,I,Cat_pC221,0,0
+51,CAC116,-0.0065,28,28_CAC116,167,E. coli,Sensitive,8,S,1,0,,NA,not tested,,,NA,NA,NA,NA,NA,NA,NA,NA,0,H,no cat,0,0
+52,CAC13M,-0.006,29,29_CAC13M,44,E. coli,Sensitive,4,S,1,0,,NA,not tested,,,NA,NA,NA,NA,NA,NA,NA,NA,0,H,no cat,0,0
+53,CAC10W,-0.0125,30,30_CAC10W,10,E. coli,Sensitive,8,S,1,0,,NA,not tested,,,NA,NA,NA,NA,NA,NA,NA,NA,0,H,no cat,0,0
+56,CAE11U,-0.013,32,32_CAE11U,167,E. coli,Resistant,8,S,0,0,,NA,not tested,,,NA,NA,NA,NA,NA,NA,NA,NA,0,H,no cat,0,0
+57,CAB17W,-0.004,33,33_CAB17W,131,E. coli,Resistant,16,R,1,0,repeat with high input plus CHL before DTNB remains negative,NA,not tested,y,LR no CHR_r genes,NA,NA,NA,NA,NA,NA,NA,NA,0,H,no cat,0,0
+58,CAB17W,-0.024,33,33_CAB17W,131,E. coli,Resistant,16,R,1,0,repeat with high input plus CHL before DTNB remains negative,NA,not tested,y,LR no CHR_r genes,NA,NA,NA,NA,NA,NA,NA,NA,0,H,no cat,0,0
+59,CAE12U,-0.006,34,34_CAE12U,10,E. coli,Resistant,8,R,1,0,"First MIC 12, MIC reapeat 8 - missmatch, 2nd repeat MIC = 4",NA,not tested,,,NA,NA,NA,NA,NA,NA,NA,NA,0,H,no cat,0,0
+79,CAB16G,0.0025,47,47_CAB16G,14,KpSC,Sensitive,4,S,1,0,"initial 16, 2 repeats 4",1,,y,,0,1,0,0,0,0,0,NA,1,G,catB4 ,0,1
+81,CAC13D,0.01,49,49_CAC13D,340,KpSC,Sensitive,4,S,1,0,,1,,y,,0,1,0,0,0,0,0,NA,1,G,catB4 ,0,1
+82,CAG19R,0.0045,50,50_CAG19R,1427,KpSC,Sensitive,4,S,1,0,MIC reapeat confirms,1,,,,0,1,0,0,0,0,0,NA,1,G,catB4 ,0,1
+87,CAC14G,-0.019,53,53_CAC14G,1427,KpSC,Resistant,8,S,0,0,MIC repeat 4 ,1,,,,0,1,0,0,0,0,0,NA,1,G,catB4 ,0,1
+92,CAD107,0.0095,57,57_CAD107,14,KpSC,Resistant,2,S,0,0,MIC repeat 4 ,NA,not tested,,,NA,NA,NA,NA,NA,NA,NA,NA,0,H,no cat,0,0
