@@ -18,8 +18,16 @@ Then navigate to the directory corresponding to the analysis you want to and run
 the script there which will generate the figure.
 
 The co-occurance analysis is wrapped in an Rmarkdown document, which, when
-rendered will reproduce the analysis and figures from the manuscript.
+rendered will reproduce the analysis and figures from the manuscript. This can
+be rendered with the `rmarkdown` package by running
 
+```
 
+rmarkdown::render("Fig4_and_SFig6_Co_occurence_analysis/Co-occurrence analysis of AMR genes.Rmd")
+```
+
+Alternatively the script `install_dependencies_and_run_all_analyses.R` will
+install the needed R packages if they are not installed on your system, and run
+all the analyses in turn to generate the plots and the Rmarkdown output.
 
 
