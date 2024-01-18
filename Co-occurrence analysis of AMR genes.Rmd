@@ -1,0 +1,664 @@
+---
+title: "Co-occurrence analysis of AMR genes"
+author: "Richard Goodman"
+date: "2023-11-03"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir="/Users/richard.goodman/Library/CloudStorage/OneDrive-LSTM/Manuscripts for Papers/Fabrice CHL-R susceptibility paper/R code for github/Co-occurence of AMR genes")
+
+```
+
+\ 
+
+This analysis takes a binary table of AMR genes present in a defined set of genomes from [abricate](https://github.com/tseemann/abricate) and creates a co-occurrence matrix and subsequent analysis of the co-occurrence interactions between AMR genes across the genomes. 
+
+\ 
+
+# Loading packages
+
+```{r loading packages, echo = T, error=FALSE, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(pheatmap)
+library(RColorBrewer)
+library(igraph)
+library(readr)
+library(cooccur)
+library(reshape2)
+library(pheatmap)
+library(RColorBrewer)
+```
+
+\ 
+
+# Reading in data 
+
+```{r reading in data, echo = T, echo = T, error=FALSE, warning=FALSE, message=FALSE}
+
+abricate_output = read_csv("data/all_abricate_773_Ec_Kp_CHL_Resfinder_L60_T90.csv")
+
+drug_class = read_csv("data/resfinder_phenotype_table_edit.csv")
+
+ab_tab = abricate_output
+
+# Make sense of dataset 
+
+head(ab_tab)
+class(ab_tab)
+
+```
+\ 
+
+# Wrangling the abricate table
+
+\ 
+
+## Pre-processing the dataset
+
+First duplicates must be removed from the dataset. These cause issues in downstream analysis. 
+
+```{r Remove duplicates, echo = T, error=FALSE, warning=FALSE, message=FALSE}
+rm_duplicates = function(ab_tab)
+{
+  
+  # First Remove duplicates
+  # These cause issues with creating a lit rather than a dataframe
+  # When compared against the database there can sometimes be duplciates 
+  
+  # arrange and group by ab_tab 
+  ab_tab_unique <- ab_tab %>% 
+    arrange(GENE, -`%COVERAGE`) %>% 
+    group_by(GENE)
+  
+  # Check the colnames
+  colnames(ab_tab_unique)
+  
+  # Check the duplicates 
+  duplicated(ab_tab_unique[c("#FILE","GENE")])
+  print("Duplicates found:")
+  print(c(which(duplicated(ab_tab_unique[c("#FILE","GENE")]) == TRUE))) # see which contain duplicates
+  
+  # Remove columns that contain duplicates in FILE, GENE and COVERAGE 
+  ab_tab_unique <- ab_tab[!duplicated(ab_tab_unique[c("#FILE","GENE")]),] #using colnames
+  #ab_tab_unique <- ab_tab_unique[!duplicated(ab_tab_unique[c(1,2)]),] #using col numbers
+  
+  
+  # Check whether duplicates have been delted 
+  print("Duplicates remaining:")
+  print(which(duplicated(ab_tab_unique[c("#FILE","GENE")]) == TRUE)) # see which contain duplicates
+  
+  {
+    return(ab_tab_unique)
+  }
+}
+
+
+# Run function 
+ab_tab_unique = rm_duplicates(ab_tab)
+```
+
+
+
+
+```{r Rename catB3_2 to catB4, echo = T, error=FALSE, warning=FALSE, message=FALSE}
+rename_catB4 = function(ab_tab)
+{
+  
+  # Rename any genes called catB3_1 with a % cverage lower than in the GENE column 
+  ab_tab_new <- mutate(ab_tab, GENE = ifelse(GENE == "catB3_1" & "%COVERAGE" < 90, "catB4", GENE))
+  test = ab_tab_new %>% filter(GENE == "catB4")
+  print("amount of catB4 found:")
+  print(nrow(test))
+  
+  {
+    return(ab_tab_new)
+  }
+}
+
+
+ab_tab_unique = rename_catB4(ab_tab_unique)
+```
+
+\ 
+
+## Creating a count table
+
+Next we make a count table of the AMR genes to display it in a way in which we can make it into a co-occurence table. 
+
+```{r Making a count table, echo = T, error=FALSE, warning=FALSE, message=FALSE}
+mk_count_table = function(ab_tab)
+{
+  # Funtion to make the Abricate table wide 
+  # Create a new value from original ab_tab to wide count table 
+  wide = ab_tab %>% 
+    # select strain, gene and resistance and rename
+    select("#FILE", GENE, RESISTANCE) %>% 
+    # rename 
+    rename(gene = "GENE",
+           file = "#FILE",
+           resistance = "RESISTANCE") %>% 
+    # count genes vs strains
+    count(file, gene) %>% 
+    # Convert to wide table with genes as column headers and n as values 
+    pivot_wider(names_from = gene,
+                values_from = n)
+  
+  # Shorten strain names (remove the unnecessary string)
+  wide$file = gsub(".fa", "", wide$file)
+  wide$file = gsub("_assembled.fasta", "", wide$file)
+  
+  {
+    return(wide)
+  }
+}
+
+# Run function 
+wide = mk_count_table(ab_tab_unique)
+
+
+# Check
+head(wide)
+
+
+# Check
+nrow(wide)
+
+```
+
+\  
+
+Next convert this count table to a dataframe and matrix. 
+
+```{r converting count table, echo = T, error=FALSE, warning=FALSE, message=FALSE, results = 'hide'}
+
+
+
+# Converts to dataframe
+count_to_dataframe = function(wide)
+{
+  wide = wide
+  
+  # make the genenames a variable 
+  rows = wide$file
+  
+  # Remove the file column
+  wide3 = wide %>% select(-file)
+  
+  # name the rows as strains
+  rownames(wide3) = rows
+  
+  # convert to dataframe
+  d = as.data.frame(wide3)
+  
+  # convert na to 0
+  d[is.na(d)] = 0
+  
+  #name rows
+  rownames(d) = rows
+  
+  # convert to matrix
+  d = d
+  
+  
+  {
+    return(d)
+  }
+}
+
+d = count_to_dataframe(wide)
+
+# Converts to matrix
+count_to_mat = function(wide)
+{
+  wide = wide
+  
+  # make the genenames a variable 
+  rows = wide$file
+  
+  # Remove the file column
+  wide3 = wide %>% select(-file)
+  
+  # name the rows as strains
+  rownames(wide3) = rows
+  
+  # convert to dataframe
+  d = as.data.frame(wide3)
+  
+  # convert na to 0
+  d[is.na(d)] <- 0
+  
+  # name rows
+  rownames(d) = rows
+  
+  # convert to matrix
+  mat = as.matrix(d)
+  
+  
+  {
+    return(mat)
+  }
+}
+
+# Run Function 
+mat = count_to_mat(wide)
+
+
+# Check output
+head(mat)
+nrow(mat)
+class(mat)
+mat
+colnames(mat)
+
+
+```
+
+\ 
+
+# Using the cooccur package
+
+The [cooccur package](https://griffithdan.github.io/pages/code_and_data/cooccur.html) implements the probabilistic mode of species co-occurrence from Veech 2013[^1]. Here we are using it to analyse the co-occurence of AMR genes instead of species. 
+
+The statistics use the observed probability of co-occurrence and the expected probability of co-occurrence to create two p values `p_lt` and `p_gt`.
+
+`p_lt` is the probability that the two species would co-occur at a frequency less than the observed number of co-occurrence sites if the two species were distributed randomly (independently) of one another.
+
+`p_gt` is the probability of co-occurrence at a frequency greater than the observed frequency.
+
+For the plotting, if `p_gt` is greater than 0.05 (that is not significant) then it's named 0, if not it's named 1. 
+
+If p_lt is greater than 0.05 (that is not significant) then it's named 0, if not it's named -1. 
+
+* If a co-occurrence is 1 then it is labelled positive (blue)
+* If a co-occurrence is 0 then it is labelled random (grey)
+* If a co-occurrence is -1 it is labelled negative (orange)
+
+[^1]: Veech (2013), A probabilistic model for analysing species co-occurrence, Global Ecology and Biogeography, DOI: 10.1111/j.1466-8238.2012.00789.x
+
+\ 
+
+## Creating a cooccur object
+
+```{r Running cooccur function, error=FALSE, warning=FALSE, message=FALSE, results = 'hide'}
+
+# Transpose so gene names are the rows
+# We need this to allow for a cooccur object 
+d_t = t(d)
+
+cooccur.ESBL.genes <- cooccur(d_t,
+                           type = "spp_site",
+                           thresh = TRUE,
+                           spp_names = TRUE)
+
+
+```
+\ 
+
+## Checking a cooccur object 
+
+```{r, echo = T, error=FALSE, warning=FALSE, message=FALSE}
+
+
+class(cooccur.ESBL.genes)
+
+summary(cooccur.ESBL.genes)
+
+```
+
+\ 
+
+## Plotting cooccurence using cooccur function
+
+```{r Plotting a cooccur object, error=FALSE, warning=FALSE, message=FALSE}
+cooccur_object = cooccur.ESBL.genes
+
+
+    ##
+    allargs <- match.call(expand.dots = TRUE)
+    plotrand <- allargs$plotrand
+    plotrand <- ifelse(test = is.null(plotrand),yes = FALSE,no = plotrand)
+    randsummary<- allargs$randsummary
+    randsummary <- ifelse(test = is.null(randsummary),yes = FALSE,no = randsummary)
+    
+    ##
+    
+    # Change as necessary - this is the number of genes in our case 169 for all 
+    dim = cooccur_object$species
+    #
+    comat_pos = matrix(nrow=dim,ncol=dim)
+    comat_neg = comat_pos 
+    
+    # Change as necessary - this is the full results table 
+    co_tab <- cooccur_object$result
+    #
+    
+    # Create co_occurrence 
+    for (i in 1:nrow(co_tab)){
+      comat_pos[co_tab[i,"sp1"],co_tab[i,"sp2"]] <- co_tab[i,"p_gt"]
+      comat_pos[co_tab[i,"sp2"],co_tab[i,"sp1"]] <- co_tab[i,"p_gt"]
+      
+      row.names(comat_pos[co_tab[i,"sp2"],co_tab[i,"sp1"]])
+      
+    }
+    for (i in 1:nrow(co_tab)){
+      comat_neg[co_tab[i,"sp1"],co_tab[i,"sp2"]] <- co_tab[i,"p_lt"]
+      comat_neg[co_tab[i,"sp2"],co_tab[i,"sp1"]] <- co_tab[i,"p_lt"]
+    }
+    
+    # Join positive and negative cooccurence matrix and label as 0.05, 0 or -1
+    comat <- ifelse(comat_pos>=0.05,0,1) + ifelse(comat_neg>=0.05,0,-1)
+    colnames(comat) <- 1:dim
+    row.names(comat) <- 1:dim
+    
+    # Name the co-occurence matrix
+    
+    colnames(comat) = unique(cooccur_object$spp.names)
+    rownames(comat) = unique(cooccur_object$spp.names)
+    
+    #ind <- apply(comat, 1, function(x) all(is.na(x)))
+    #comat <- comat[!ind,]
+    #ind <- apply(comat, 2, function(x) all(is.na(x)))
+    #comat <- comat[,!ind]
+    
+    comat[is.na(comat)] <- 0
+    
+    origN <- nrow(comat)
+    
+    # SECTION TO REMOVE SPECIES INTERACTION WITH NO OTHERS
+    
+    #rmrandomspp <- function(orimat,plotrand = FALSE,randsummary = FALSE){
+    if(plotrand == FALSE){
+      ind <- apply(comat, 1, function(x) all(x==0))
+      comat <- comat[!ind,]    
+      ind <- apply(comat, 2, function(x) all(x==0))
+      comat <- comat[,!ind]
+      #ind <- apply(orimat, 1, function(x) all(x==0))
+      #orimat <- orimat[!ind,]    
+      #ind <- apply(orimat, 2, function(x) all(x==0))
+      #orimat <- orimat[,!ind]
+    }
+    #return(orimat)
+    #}
+    
+    #comat <- rmrandomspp(orimat = comat, dots)
+    #_____________________________________
+    
+    postN <- nrow(comat)
+    
+    
+    ##comat <- comat[order(rowSums(comat)),]
+    ##comat <- comat[,order(colSums(comat))]
+    
+    #comat <- rmrandomspp(orimat = comat, ...)
+    
+    #ind <- apply(comat, 1, function(x) all(x==0))
+    #comat <- comat[!ind,]
+    #ind <- apply(comat, 2, function(x) all(x==0))
+    #comat <- comat[,!ind]
+    
+    ind <- apply(comat, 1, function(x) all(x==0))
+    comat <- comat[names(sort(ind)),]
+    ind <- apply(comat, 2, function(x) all(x==0))
+    comat <- comat[,names(sort(ind))]
+    
+    #comat
+    data.m = melt(comat)
+    colnames(data.m) <- c("X1","X2","value")
+    data.m$X1 <- as.character(data.m$X1)
+    data.m$X2 <- as.character(data.m$X2)
+    
+    meas <- as.character(unique(data.m$X2))
+    
+    dfids <- subset(data.m, X1 == X2)
+    
+    X1 <- data.m$X1
+    X2 <- data.m$X2
+    
+    df.lower = subset(data.m[lower.tri(comat),],X1 != X2)
+    
+    ##### testing the rand summary
+    if(randsummary == FALSE){  
+    }else{
+      dim <- nrow(comat)
+      ext.dim <- round(dim*0.2,digits = 0)
+      if(ext.dim<0){ext.dim<-1}
+      placehold <- paste("ext_", rep(c(1:ext.dim),each = dim), sep="")
+      
+      randcol.df <- data.frame(
+        X1 = placehold,
+        X2 = rep(meas,times = ext.dim),
+        value = rep(x = c(-2), times = dim*ext.dim))
+      
+      df.lower <- rbind(df.lower,randcol.df)
+      meas <- c(meas,unique(placehold))
+    }
+    
+    
+    
+    
+    #_______________________
+    
+    X1 <- df.lower$X1
+    X2 <- df.lower$X2
+    value <- df.lower$value
+    
+    
+    
+    ####
+    if(randsummary == FALSE){  
+      p <- ggplot(df.lower, aes(X1, X2)) + geom_tile(aes(fill = factor(value,levels=c(-1,0,1))), colour ="white") 
+      p <- p + scale_fill_manual(values = c("#FFCC66","dark gray","light blue"), name = "", labels = c("negative","random","positive"),drop=FALSE) + 
+        theme(axis.text.x = element_blank(),axis.text.y = element_blank(),axis.ticks = element_blank(),plot.title = element_text(vjust=-4,size=20, face="bold"),panel.background = element_rect(fill='white', colour='white'),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),legend.position = c(0.9, 0.5),legend.text=element_text(size=18)) + 
+        ggtitle("AMR gene Co-occurrence Matrix") + 
+        xlab("") + ylab("") + 
+        scale_x_discrete(limits=meas, expand = c(0.3, 0),drop=FALSE) + 
+        scale_y_discrete(limits=meas, expand = c(0.3, 0),drop=FALSE) 
+      p <- p + geom_text(data=dfids,aes(label=X1),hjust=1,vjust=0,angle = -22.5)#, color="dark gray")
+      
+      
+    }else{
+      
+      p <- ggplot(df.lower, aes(X1, X2)) + geom_tile(aes(fill = factor(value,levels=c(-1,0,1,-2))), colour ="white") 
+      p <- p + scale_fill_manual(values = c("#FFCC66","dark gray","light blue","light gray"), name = "", labels = c("negative","random","positive","random"),drop=FALSE) + 
+        theme(axis.text.x = element_blank(),axis.text.y = element_blank(),axis.ticks = element_blank(),plot.title = element_text(vjust=-4,size=20, face="bold"),panel.background = element_rect(fill='white', colour='white'),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),legend.position = c(0.9, 0.5),legend.text=element_text(size=18)) + 
+        ggtitle("Species Co-occurrence Matrix") + 
+        xlab("") + ylab("") + 
+        scale_x_discrete(limits=meas, expand = c(0.3, 0),drop=FALSE) + 
+        scale_y_discrete(limits=meas, expand = c(0.3, 0),drop=FALSE) 
+      p <- p + geom_text(data=dfids,aes(label=X1),hjust=1,vjust=0,angle = -22.5)#, color="dark gray")
+      
+      dim <- nrow(comat)
+      ext_x <- dim + 0.5 #(ext.dim/2)
+      ext_y <- dim + 1
+      nrem <- origN - postN
+      randtext <- paste(nrem, " completely\nrandom species")
+      ext_dat <- data.frame(ext_x=ext_x,ext_y=ext_y,randtext=randtext)
+      
+      p <- p + geom_text(data=ext_dat,aes(x = ext_x,y = ext_y,label=randtext),hjust=0,vjust=0, color="dark gray")
+    }
+    ####
+    
+    p
+    
+```
+\ 
+
+Save the co-occurence matrix as "comat".
+
+```{r Saving co-occurence matrix}
+
+ write.csv(comat, file = "out_tabs/CoccuR_cooccurence_matrix.csv")
+
+```
+
+\ 
+
+## Plotting cooccurence using pheatmap
+
+
+```{r Plotting cooccurrence of all genes with pheatmap}
+
+
+# Check comat object 
+
+comat_pheatmap = comat
+
+colnames(comat_pheatmap) = gsub("_1", "", colnames(comat_pheatmap))
+colnames(comat_pheatmap) = gsub("_2", "", colnames(comat_pheatmap))
+colnames(comat_pheatmap) = gsub("_3", "", colnames(comat_pheatmap))
+colnames(comat_pheatmap) = gsub("_4", "", colnames(comat_pheatmap))
+colnames(comat_pheatmap) = gsub("_5", "", colnames(comat_pheatmap))
+colnames(comat_pheatmap) = gsub("_6", "", colnames(comat_pheatmap))
+colnames(comat_pheatmap) = gsub("_7", "", colnames(comat_pheatmap))
+colnames(comat_pheatmap) = gsub("_8", "", colnames(comat_pheatmap))
+
+rownames(comat_pheatmap) = gsub("_1", "", rownames(comat_pheatmap))
+rownames(comat_pheatmap) = gsub("_2", "", rownames(comat_pheatmap))
+rownames(comat_pheatmap) = gsub("_3", "", rownames(comat_pheatmap))
+rownames(comat_pheatmap) = gsub("_4", "", rownames(comat_pheatmap))
+rownames(comat_pheatmap) = gsub("_5", "", rownames(comat_pheatmap))
+rownames(comat_pheatmap) = gsub("_6", "", rownames(comat_pheatmap))
+rownames(comat_pheatmap) = gsub("_7", "", rownames(comat_pheatmap))
+rownames(comat_pheatmap) = gsub("_8", "", rownames(comat_pheatmap))
+
+colnames(comat_pheatmap) = gsub("catB3_2", "catB3", colnames(comat_pheatmap))
+rownames(comat_pheatmap) = gsub("catB3_2", "catB3", rownames(comat_pheatmap))
+
+diag(comat_pheatmap) = 2
+
+pheatmap(mat = comat_pheatmap,
+         color = c("#FFCC66", "dark gray", "light blue", "white"),
+         cluster_cols = TRUE, 
+         cluster_rows = TRUE, 
+         clustering_distance_cols = "euclidean",
+         clustering_distance_rows = "euclidean",
+         clustering_method = "complete",
+         fontsize = 10, 
+         legend_breaks = c(-1, 0, 1, 2),
+         legend_labels = c("negative", "random", "positive", "same gene"))
+
+```
+
+
+\ 
+
+
+### Subsetting from probability table
+
+A selection of genes were chosen to look at specifically. We chose to look at ESBL genes, phenicol resistance genes and the aminoglycoside resistance gene aac(6')-Ib-cr. 
+
+The selection was taken from the probability table. 
+
+The probability table is arranged as such: 
+* sp1 - Numeric label giving the identity of species 1, assigned based on the order in the input matrix
+* sp2 - Numeric label for species 2
+* sp1_inc - Number of sites (or samples) that have species 1
+* sp2_inc - Number of sites that have species 2
+* obs_cooccur - Observed number of sites having both species
+* prob_cooccur - Probability that both species occur at a site
+* exp_cooccur - Expected number of sites having both species
+* p_lt - Probability that the two species would co-occur at a frequency less than the observed number of co-occurrence sites if the two species were distributed randomly (independently) of one another
+* p_gt - Probability of co-occurrence at a frequency greater than the observed frequency
+* sp1_name - If species names were specified in the community data matrix this field will contain the supplied name of sp1
+* sp2_name - The supplied name of sp2
+
+```{r Subsetting from probability table, error=FALSE, warning=FALSE, message=FALSE}
+
+# First make a probability table
+prob.table.ESBL.genes = prob.table(cooccur.ESBL.genes)
+
+prob.table.ESBL.genes.filter = prob.table.ESBL.genes
+
+# Filter for genes of interest
+prob.table.ESBL.genes.filter = prob.table.ESBL.genes.filter %>% 
+  filter(sp1_name == "blaCTX-M-15_1" |
+           sp1_name == "blaOXA-1_1" |
+           sp1_name == "blaTEM-1B_1" |
+           sp1_name == "catA1_1"|
+           sp1_name == "catB3_2" |
+           sp1_name == "catB4" |
+           sp1_name == "aac(6')-Ib-cr_1")
+
+
+prob.table.ESBL.genes.filter.full = prob.table.ESBL.genes %>% 
+  filter(sp1_name == "blaCTX-M-15_1" |
+           sp1_name == "blaOXA-1_1" |
+           sp1_name == "blaTEM-1B_1" |
+           sp1_name == "catA1_1"|
+           sp1_name == "catB3_2" |
+           sp1_name == "catB4" |
+           sp1_name == "aac(6')-Ib-cr_1") %>% 
+  filter(sp2_name == "blaCTX-M-15_1" |
+           sp2_name == "blaOXA-1_1" |
+           sp2_name == "blaTEM-1B_1" |
+           sp2_name == "catA1_1"|
+           sp2_name == "catB3_2" |
+           sp2_name == "catB4" |
+           sp2_name == "aac(6')-Ib-cr_1")
+
+
+# Rename sp1_name
+prob.table.ESBL.genes.filter.full$sp1_name = gsub("blaCTX-M-15_1", "blaCTX-M-15", prob.table.ESBL.genes.filter.full$sp1_name)
+prob.table.ESBL.genes.filter.full$sp1_name = gsub("blaOXA-1_1", "blaOXA-1", prob.table.ESBL.genes.filter.full$sp1_name)
+prob.table.ESBL.genes.filter.full$sp1_name = gsub("blaTEM-1B_1", "blaTEM-1B", prob.table.ESBL.genes.filter.full$sp1_name)
+prob.table.ESBL.genes.filter.full$sp1_name = gsub("catA1_1", "catA1", prob.table.ESBL.genes.filter.full$sp1_name)
+prob.table.ESBL.genes.filter.full$sp1_name = gsub("catB3_2", "catB3", prob.table.ESBL.genes.filter.full$sp1_name)
+prob.table.ESBL.genes.filter.full$sp1_name = gsub("catB4", "catB4", prob.table.ESBL.genes.filter.full$sp1_name)
+prob.table.ESBL.genes.filter.full$sp1_name = gsub("aac(6')-Ib-cr_1", "aac(6')-Ib-cr", prob.table.ESBL.genes.filter.full$sp1_name)
+
+# Rename sp2_name
+prob.table.ESBL.genes.filter.full$sp2_name = gsub("blaCTX-M-15_1", "blaCTX-M-15", prob.table.ESBL.genes.filter.full$sp2_name)
+prob.table.ESBL.genes.filter.full$sp2_name = gsub("blaOXA-1_1", "blaOXA-1", prob.table.ESBL.genes.filter.full$sp2_name)
+prob.table.ESBL.genes.filter.full$sp2_name = gsub("blaTEM-1B_1", "blaTEM-1B", prob.table.ESBL.genes.filter.full$sp2_name)
+prob.table.ESBL.genes.filter.full$sp2_name = gsub("catA1_1", "catA1", prob.table.ESBL.genes.filter.full$sp2_name)
+prob.table.ESBL.genes.filter.full$sp2_name = gsub("catB3_2", "catB3", prob.table.ESBL.genes.filter.full$sp2_name)
+prob.table.ESBL.genes.filter.full$sp2_name = gsub("catB4", "catB4", prob.table.ESBL.genes.filter.full$sp2_name)
+prob.table.ESBL.genes.filter.full$sp2_name = gsub("aac(6')-Ib-cr_1", "aac(6')-Ib-cr", prob.table.ESBL.genes.filter.full$sp2_name)
+
+# Plot ggplot heatmap as in cooccur package
+
+# Plotting filtered for catB3, catB4, aac(6')-Ib-cr and bla genes (prob.table.ESBL.genes.filter.full)
+
+ptab <- prob.table.ESBL.genes.filter.full
+
+# p_lt - Probability that the two species would co-occur at a frequency less than the observed number of co-occurrence sites if the two species were distributed randomly (independently) of one another
+# p_gt - Probability of co-occurrence at a frequency greater than the observed frequency
+# If p_gt is greater than 0.05 (that is not significant) then name 0, if not name 1
+# If p_lt is greater than 0.05 (that is not significant) then name 0, if not name -1
+
+ptab$signs <- ifelse(ptab$p_gt >= 0.05, 0, 1) + ifelse(ptab$p_lt >= 0.05, 0, -1)
+exp_cooccur <- ptab$exp_cooccur
+obs_cooccur <- ptab$obs_cooccur
+signs <- ptab$signs
+
+
+
+# _______________________
+# Plotting with white background 
+
+p <- ggplot(ptab, aes(x = sp1_name, y = sp2_name)) + 
+  geom_tile(aes(fill = factor(signs, levels = c(-1, 0, 1))), colour ="white")
+p <- p + scale_fill_manual(values = c("#FFCC66", "dark gray", "light blue"), 
+                           name = "", 
+                           labels = c("negative", "random", "positive"), 
+                           drop = FALSE)
+p <- p + theme(plot.title = element_text(vjust = 2, 
+                                         size = 20, 
+                                         face = "bold"), 
+               legend.text = element_text(size = 18), 
+               axis.title = element_text(size = 20), 
+               axis.text = element_text(size = 18), 
+               axis.text.x = element_text(angle = 90, hjust = 1), 
+               panel.background = element_rect(fill='white', colour='white'),
+               panel.grid.major = element_blank(), 
+               panel.grid.minor = element_blank()) + 
+  xlab("Gene name") + 
+  ylab("Gene name")
+p <- p + ggtitle("Co-occurrence across select genes") 
+
+p
+
+```
+
