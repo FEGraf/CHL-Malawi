@@ -1,0 +1,105 @@
+---
+title: "cat genes per sequence type"
+author: MDP and FEG
+format: html
+date: 26/10/2023
+---
+
+### Load required packages
+
+```{r}
+library(tidyverse)
+library(lemon)
+library(here)
+```
+
+### Load data
+
+```{r}
+f5.data <- read_csv(here("Fig5__data_frame_ST_comparison_Malawi_vs_100ST.csv"), col_types = "ffffnn")
+```
+
+### Description of dataframe
+
+Factors to take into account for this data frame:
+* `dataset` : two distinct datasets (Malawi and 100ST)
+    * Malawi : Collection of 840 genome assemblies from our study's Malawi isolates.
+    * 100ST : Collection of 10k genome assemblies from 100 randomly selected isolates from each of the 100 most common E. coli STs in Enterobase, downloaded on 18/12/2020, and 4 extra genomes from ST391, ST44, ST940 and ST9847 with release date before 18/12/2020 that were added to match with the STs from the Malawi dataset.
+* `phylogroup` : taxonomic classification (7 levels: A, B1, B2, C, D, E, F)
+* `ST` : sequence type (75 levels)
+* `gene`: name of cat gene
+
+Numeric variables for the two datasets:
+* `n` : number of the respective cat gene detected per ST and dataset
+* `nST` : total number of genomes tested per ST and dataset
+
+
+### Prepare dataframe for plotting
+
+Add column with numeric variable for
+* `cat_prop` : proportion of of the respective cat resistance gene detected per ST and dataset (n/nST)
+```{r}
+f5.data <- mutate(f5.data, cat_prop = n/nST)
+```
+
+Reorder and rename some factor levels
+```{r}
+# Reverse order of the two datasets, to have Malawi before 100ST
+levels(f5.data$dataset)
+f5.data$dataset <- fct_relevel(f5.data$dataset, rev)
+
+# Reorder (and rename) cat gene names
+levels(f5.data$gene)
+sort(levels(f5.data$gene)) # sorts levels alphabetically
+f5.data$gene <- fct_relevel(f5.data$gene,c("catA1", "catA1, catA2", "catA1, catB3",
+                                  "catA1, catB3delta443-633", "catB3delta443-633",
+                                  "catA2", "catA3", "catB", "catB3"))
+levels(f5.data$gene)
+```
+
+
+### Plot data
+```{r}
+f5.plot <- ggplot(f5.data, aes(x = ST, y = cat_prop, fill=gene)) +
+  theme_bw()+
+  facet_grid(dataset ~ phylogroup, switch = "x", scales = "free_x", space = "free_x")+
+  #to repeat tick marks of x-axis (here: numbers of ST labels), there is currently an issue with the lemon package: the gap between the facets is increased and it is not possible to decrease it e.g. with theme(panal.spacing = unit(....)). See: https://github.com/duttashi/visualizer/issues/50
+  #facet_rep_grid(dataset ~ phylogroup, switch = "x", scales = "free_x", space = "free_x", repeat.tick.labels = c("x", "right"))+
+  geom_bar(stat = "identity")+
+  labs(y = "Proportion of cat resistance genes\n", x = "\nPhylogroup and sequence types (ST)")+
+  #scale_y_continuous(breaks = c(0, 0.2, 0.4, 0.6, 0.8, 1), limits = c(-0.05, 1.05))+
+  scale_y_continuous(breaks = c(0, 0.2, 0.4, 0.6, 0.8, 1))+
+  scale_fill_manual(name = "cat resistance\ngenes",
+                    values = c("#6baed6", "#bdc9e1", "#ae017e",
+                               "#74c476","#238b45",
+                               "#2171b5", "#df65b0","#e31a1c", "#fecc5c"),
+                    labels = c("catA1", "catA1, catA2", "catA1, catB3",
+                               expression(italic("catA1, catB3∆"^phantom()^"443-633")), expression(italic("catB3∆"^phantom()^"443-633")),
+                               "catA2", "catA3", "catB", "catB3"))+
+  theme(axis.title = element_text(colour="black", size=12),
+        axis.text.x = element_text(colour = "black", size = 9, angle = 60, vjust = 0.5, hjust = 0.5),
+        #axis.title.x = element_blank(),
+        axis.text.y  = element_text(colour="black", size=10),
+        strip.background =element_rect(fill="#f7fcfd"),
+        strip.text = element_text(colour="black", size=12),
+        strip.placement = "outside", 
+        legend.position = "bottom",
+        legend.title = element_text(size = 12, colour = "black"),
+        #legend.title = element_blank(),
+        legend.text = element_text(size = 10, colour = "black", face = "italic"),
+        legend.text.align = 0,
+        panel.spacing = unit(0.2, "cm", data = NULL)
+        )
+
+f5.plot
+```
+
+
+### Write plot to pdf
+
+```{r}
+ggsave("Fig5.png", plot = f5.plot, height = 18, width = 32, units = "cm", dpi = 300)
+#ggsave("Fig5.png", plot = f5.plot)
+```
+
+
