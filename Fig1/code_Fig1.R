@@ -16,7 +16,7 @@ library(here)
 
 # set working directory and read in data table
 
-CHL.all <- read.csv(here("Fig1/suppl.table1_v2.csv"))
+CHL.all <- read.csv(here("Fig1/suppl.table1.csv"))
 
 counts <- read.csv(here("Fig1/suppl.table1.counts.csv"))
 
