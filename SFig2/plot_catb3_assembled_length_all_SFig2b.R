@@ -16,7 +16,7 @@ library(here)
 
 
 catb3_card_df <-
-  read_csv("data-processed/catb3_card_assembly_stats.csv")
+  read_csv("SFig2/data-processed/catb3_card_assembly_stats.csv")
 
 catb3_card_df |>
   mutate(
@@ -36,19 +36,19 @@ catb3_card_df |>
   ggplot(aes(fct_reorder(lane, study), value, color = study)) +
   scale_colour_manual(values = c("#2c7fb8", "red"),
                       name = "Study",
-                    labels= c("ESBL", "Bacteraemia" ))+
+                    labels= c("ESBL", "Bacteraemia")) +
   geom_point(size = 1, alpha = 0.8) +
   facet_grid(name ~ species, scale = "free") +
   theme_bw() +
   theme(axis.text.x = element_blank()) +
-  theme(strip.background = element_rect(fill="#f7fcfd")) +
+  theme(strip.background = element_rect(fill = "#f7fcfd")) +
   labs(
-    title = "Length/identity of assembled catB3 ARIBA/CARD",
+    title = "Length/identity of assembled catB3 CARD",
     subtitle = "Length of full catB3 is 633; there are many assemblies at 442b",
     x = "sample"
   ) -> FigS2b
 
-ggsave(here("ariba-card-catb3-assemblystats.pdf"), width = 8, height = 5)
+ggsave(here("SF2b_ariba-card-catb3-assemblystats.pdf"), width = 8, height = 5)
 
 
 ### counts
