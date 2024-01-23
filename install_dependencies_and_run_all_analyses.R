@@ -27,7 +27,7 @@ dependencies <-
     "lemon",
     "quarto",
     "devtools",
-    "scales",
+    "scales"
   )
 
 # Check and install
