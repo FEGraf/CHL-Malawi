@@ -16,7 +16,7 @@ library(tidyverse)
 
 # read in data
 
-HRM <- read.csv(here("HRM_final.csv"))
+HRM <- read.csv(here("SFig4_HRM/HRM_final.csv"))
 
 #
 
@@ -91,7 +91,8 @@ d <- ggplot(filter(HRM,Target == "CatB4"), aes(x = factor(Name), y = TM, colour 
         strip.background = element_rect(fill = "#f7fcfd"),
         strip.text = element_text(colour="black", size=12)
   )
-S
+
+SFig4 <- ggarrange(a,b,c,d)
 
 ggsave("SFig4.png", plot = SFig4, dpi = 300)
 
