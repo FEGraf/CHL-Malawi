@@ -39,7 +39,9 @@ for (package in dependencies) {
 # to plot SFig2 also need the blantyreESBL package for DASSIM study metadata
 # which is installed from github
 
-devtools::install_github("https://github.com/joelewis101/blantyreESBL")
+if (!require("blantyreESBL")) {
+  devtools::install_github("https://github.com/joelewis101/blantyreESBL")
+}
 
 # Run the scripts
 
