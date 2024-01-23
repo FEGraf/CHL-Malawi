@@ -142,6 +142,5 @@ left_join(
 
 #ggsave(here("ariba-card-assembly.pdf"), width = 8, height = 4)
 ### count genes
-cat_count <- full_catB3 %>% count(X.Scientific.name, sort = TRUE)
 
 
