@@ -14,6 +14,7 @@ CHL.all <- read.csv(here("Fig1/suppl.table1.csv"))
 
 EcoST <- CHL.all %>% 
   filter(species == "E. coli") %>%
+  mutate(ST = as.character(ST)) |>
   droplevels()
 
 # plot
@@ -34,6 +35,7 @@ FigST.a
 
 KpSCST <- CHL.all %>% 
   filter(species == "KpSC") %>%
+  mutate(ST = as.character(ST)) |>
   droplevels()
 
 # plot
