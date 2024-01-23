@@ -49,6 +49,6 @@ quarto::quarto_render("Fig4_and_SFig6_Co_occurence_analysis/Co-occurrence analys
 quarto::quarto_render("Fig5_cat_genes_ST/Fig5__ST_Malawi_vs_100ST.qmd")
 source(here("SFig2/catb3ax_SFig2a.R"))
 source(here("SFig2/plot_catb3_assembled_length_all_SFig2b.R"))
-source("SFig4_HRM/SFig4_code_final.R")
+source(here("SFig4_HRM/SFig4_code_final.R"))
 source(here("SFig7_catB_frequency/code_FigS7_microbiggE_catB.R"))
 source(here("SFig8_ST/code_FigS8_ST.R"))
