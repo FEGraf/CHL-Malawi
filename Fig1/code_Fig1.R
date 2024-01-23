@@ -12,13 +12,13 @@
 
 library(tidyverse)
 library(ggpubr)
+library(here)
 
 # set working directory and read in data table
 
-setwd("~/data")
+CHL.all <- read.csv(here("Fig1/suppl.table1.csv"))
 
-CHL.all <- read.csv("~/data/suppl.table1.csv")
-counts <- read.csv("~/data/suppl.table1.counts.csv")
+counts <- read.csv(here("Fig1/suppl.table1.counts.csv"))
 
 #### Fig1A ####
 
@@ -49,11 +49,18 @@ fig1A_MS
 #### Fig1B ####
 
 # select CHL susceptible isolates only 
-chl.s <- CHL.all %>% 
-  filter(CHL == "S") %>%
-  mutate(dummy = "nothing") %>% 
-  droplevels() %>% 
-  mutate_if(is.character, as.factor)
+chl.s <- 
+  CHL.all %>% 
+    filter(CHL == "S") %>%
+    mutate(dummy = "nothing") %>% 
+    droplevels() %>% 
+    rowwise() %>%
+    mutate(gene_category = case_when(
+      sum(across(matches("Cat"))) > 0 & sum(across(matches("Cml|Flo"))) > 0 ~ "both",
+      sum(across(matches("Cat"))) > 0  ~ "cat",
+      sum(across(matches("Cml|Flo"))) > 0 ~ "other",
+      TRUE ~ "no_R_gene")) %>%
+    mutate_if(is.character, as.factor)
 
 # reorder levels 
 
@@ -114,8 +121,8 @@ Fig1_MS <- ggarrange(fig1A_MS, fig1B_MS, Fig1C_MS,
 Fig1_MS
 
 
-ggsave("Figure1.tiff", plot = Fig1_MS, device = "tiff", scale =1, width = 25, height = 21, units = "cm", dpi = 300)
+ggsave(here("Figure1.tiff"), plot = Fig1_MS, device = "tiff", scale =1, width = 25, height = 21, units = "cm", dpi = 300)
 
-ggsave("Figure1.png", plot = Fig1_MS, device = "png", scale =1, width = 25, height = 21, units = "cm", dpi = 300)
+ggsave(here("Figure1.png"), plot = Fig1_MS, device = "png", scale =1, width = 25, height = 21, units = "cm", dpi = 300)
 
 ggsave("Figure1.pdf", plot = Fig1_MS, device = "pdf", scale =1, width = 25, height = 21, units = "cm", dpi = 300)

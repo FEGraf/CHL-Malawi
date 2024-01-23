@@ -4,9 +4,6 @@
 #date: 
 
 
-# set working directory
-setwd("~/data")
-dir()
 
 # use here() instead with Rstudio projects!
 # see https://www.tidyverse.org/blog/2017/12/workflow-vs-script/
@@ -16,7 +13,7 @@ library(ggpubr)
 
 ### load data
 
-full_catB3 <- read.csv(here("microbigge_catB3_230804.csv"))
+full_catB3 <- read.csv(here("SFig7_catB_frequency/microbigge_catB3_230804.csv"))
 
 
 ### FigS7a  - counts of catB3 vs coverage of reference, n = 46667
@@ -125,8 +122,7 @@ FigS7c
 
 # isolate source (host) -------------------------------
 
-FigS7d <- 
-  
+FigS7d <-   
   full_catB3 %>%
   janitor::clean_names() %>% # tidies up your var names
   mutate(
@@ -247,10 +243,10 @@ FigS7.final <- ggarrange(FigS7a, FigS7b, FigS7c, FigS7d, FigS7e,
 FigS7.final
 
 #save figures: 
-ggsave("FigS7.final.pdf", plot = FigS5.final, scale =1, width = 30, height = 42, units = "cm", dpi = 300)
+ggsave(here("FigS7.final.pdf"), plot = FigS7.final, scale =1, width = 30, height = 42, units = "cm", dpi = 300)
 
-ggsave("FigS7.final.png", plot = FigS5.final, device = "png", scale =1, width = 30, height = 42, units = "cm", dpi = 300)
+ggsave(here("FigS7.final.png"), plot = FigS7.final, device = "png", scale =1, width = 30, height = 42, units = "cm", dpi = 300)
 
-ggsave("FigS7.final.tiff", plot = FigS5.final, device = "tiff", scale =1, width = 30, height = 42, units = "cm", dpi = 300)
+ggsave(here("FigS7.final.tiff"), plot = FigS7.final, device = "tiff", scale =1, width = 30, height = 42, units = "cm", dpi = 300)
 
 

@@ -9,11 +9,11 @@
 # load packages
 
 library(tidyverse)
+library(here)
 
-# set working directory and read in data table
+# read in data table
 
-setwd("~/data")
-rCAT_MS <- read.csv("~/data/rCATfinal_MS.csv")
+rCAT_MS <- read.csv(here("Fig2_rCAT/rCATfinal_MS.csv"))
 
 # plot
 
@@ -44,3 +44,5 @@ Fig2_final <- rCAT_MS %>% ggplot (aes(x = Abs405, y = as.character(supplier_name
 
 Fig2_final
 
+
+ggsave(here("Figure2.pdf"), plot = Fig2_final, device = "pdf", scale =1, width = 20, height = 25, units = "cm", dpi = 300)

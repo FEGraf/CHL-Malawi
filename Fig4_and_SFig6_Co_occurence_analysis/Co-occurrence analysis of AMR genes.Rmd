@@ -7,7 +7,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_knit$set(root.dir="/Users/richard.goodman/Library/CloudStorage/OneDrive-LSTM/Manuscripts for Papers/Fabrice CHL-R susceptibility paper/R code for github/Co-occurence of AMR genes")
+#knitr::opts_knit$set(root.dir="/Users/richard.goodman/Library/CloudStorage/OneDrive-LSTM/Manuscripts for Papers/Fabrice CHL-R susceptibility paper/R code for github/Co-occurence of AMR genes")
 
 ```
 
@@ -29,6 +29,7 @@ library(cooccur)
 library(reshape2)
 library(pheatmap)
 library(RColorBrewer)
+library(here)
 ```
 
 \ 
@@ -37,11 +38,13 @@ library(RColorBrewer)
 
 ```{r reading in data, echo = T, echo = T, error=FALSE, warning=FALSE, message=FALSE}
 
-abricate_output = read_csv("data/all_abricate_773_Ec_Kp_CHL_Resfinder_L60_T90.csv")
+abricate_output <- read_csv(
+  here("Fig4_and_SFig6_Co_occurence_analysis/data/all_abricate_773_Ec_Kp_CHL_Resfinder_L60_T90.csv"))
 
-drug_class = read_csv("data/resfinder_phenotype_table_edit.csv")
+drug_class <- read_csv(
+  here("Fig4_and_SFig6_Co_occurence_analysis/data/resfinder_phenotype_table_edit.csv"))
 
-ab_tab = abricate_output
+ab_tab <- abricate_output
 
 # Make sense of dataset 
 
@@ -489,7 +492,7 @@ Save the co-occurence matrix as "comat".
 
 ```{r Saving co-occurence matrix}
 
- write.csv(comat, file = "out_tabs/CoccuR_cooccurence_matrix.csv")
+ write.csv(comat, file = here("Fig4_and_SFig6_Co_occurence_analysis/CoccuR_cooccurence_matrix.csv"))
 
 ```
 

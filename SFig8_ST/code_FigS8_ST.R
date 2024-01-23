@@ -8,7 +8,7 @@ library(ggpubr)
 
 # read data
 
-CHL.all <- read.csv("~/data/suppl.table1.csv")
+CHL.all <- read.csv(here("Fig1/suppl.table1.csv"))
 
 #### subset E. coli ####
 
@@ -56,4 +56,7 @@ FigS_STbw <- ggarrange(FigST.a, FigST.b,
                      ncol = 1, nrow = 2, labels = c( "a", "b"))
 
 FigS_STbw
+
+
+ggsave(here("FigS8.pdf"), plot = FigS_STbw, device = "pdf", scale =1, width = 25, height = 15, units = "cm", dpi = 300)
 
