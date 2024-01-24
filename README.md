@@ -4,9 +4,9 @@ Data and code for the 'Molecular mechanisms of re-emerging chloramphenicol
 susceptibility in extended-spectrum beta-lactamase producing Enterobacterales'
 manuscript. <https://www.biorxiv.org/content/10.1101/2023.11.16.567242v1>
 
-The code will generate the figures from the manuscript. The repo is organised
-into folders, each of which contain data and code to generate one of the
-figures. 
+The R code in this repo will generate the figures from the manuscript. The repo
+is organised into folders, each of which contain data and R script (or markdown
+or quarto - see below) files to generate one of the figures. 
 
 To run the code on your machine first clone the repo e.g.
 
@@ -15,7 +15,7 @@ git clone https://github.com/FEGraf/CHL_Malawi_test2
 ```
 
 Then navigate to the directory corresponding to the analysis you want to and run
-the script there which will generate the figure.
+the R script in your favorite way which will generate the figure.
 
 The co-occurrence analysis and *cat* gene ST distribution analyses are wrapped in
 Rmarkdown/quarto documents document, which, when rendered will reproduce the
