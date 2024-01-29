@@ -1,4 +1,4 @@
-# CHL_Malawi_test2
+# CHL-Malawi
 
 Data and code for the 'Molecular mechanisms of re-emerging chloramphenicol
 susceptibility in extended-spectrum beta-lactamase producing Enterobacterales'
