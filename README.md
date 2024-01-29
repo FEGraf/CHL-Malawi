@@ -11,7 +11,7 @@ or quarto - see below) files to generate one of the figures.
 To run the code on your machine first clone the repo e.g.
 
 ```
-git clone https://github.com/FEGraf/CHL_Malawi_test2
+git clone https://github.com/FEGraf/CHL-Malawi
 ```
 
 Then navigate to the directory corresponding to the analysis you want to and run
