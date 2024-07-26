@@ -18,4 +18,4 @@ pl <-
   pheatmap(show_rownames = FALSE, legend = FALSE)
 
 pl <- ggplotify::as.ggplot(pl)
-ggsave(here("SFig9.pdf"), pl, width = 5, height = 5)
+ggsave(here("SFig1.pdf"), pl, width = 5, height = 5)
