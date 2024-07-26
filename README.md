@@ -25,7 +25,7 @@ line tool to be installed, which can be downloaded at
 R these can then be rendered using
 
 ```
-quarto::quarto_render("Fig4_and_SFig6_Co_occurence_analysis/Co-occurrence analysis of AMR genes.Rmd")
+quarto::quarto_render("Fig4_and_SFig7_Co_occurence_analysis/Co-occurrence analysis of AMR genes.Rmd")
 quarto::quarto_render("Fig5_cat_genes_ST/Fig5__ST_Malawi_vs_100ST.qmd")
 ```
 
