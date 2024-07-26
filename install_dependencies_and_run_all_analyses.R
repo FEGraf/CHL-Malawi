@@ -44,13 +44,15 @@ if (!require("blantyreESBL")) {
 }
 
 # Run the scripts
+library(here)
 
 source(here("Fig1/code_Fig1.R"))
 source(here("Fig2_rCAT/code_Fig2_rCAT.R"))
-quarto::quarto_render("Fig4_and_SFig6_Co_occurence_analysis/Co-occurrence analysis of AMR genes.Rmd")
+quarto::quarto_render("Fig4_and_SFig7_Co_occurence_analysis/Co-occurrence analysis of AMR genes.Rmd")
 quarto::quarto_render("Fig5_cat_genes_ST/Fig5__ST_Malawi_vs_100ST.qmd")
-source(here("SFig2/catb3ax_SFig2a.R"))
-source(here("SFig2/plot_catb3_assembled_length_all_SFig2b.R"))
-source(here("SFig4_HRM/SFig4_code_final.R"))
-source(here("SFig7_catB_frequency/code_FigS7_microbiggE_catB.R"))
-source(here("SFig8_ST/code_FigS8_ST.R"))
+source(here("SFig1/code_SFig1.R"))
+source(here("SFig3/catb3ax_SFig3a.R"))
+source(here("SFig3/plot_catb3_assembled_length_all_SFig3b.R"))
+source(here("SFig5_HRM/SFig5_code_final.R"))
+source(here("SFig8_catB_frequency/code_FigS8_microbiggE_catB.R"))
+source(here("SFig9_ST/code_FigS9_ST.R"))
