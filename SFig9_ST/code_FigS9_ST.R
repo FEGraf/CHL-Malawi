@@ -60,5 +60,5 @@ FigS_STbw <- ggarrange(FigST.a, FigST.b,
 FigS_STbw
 
 
-ggsave(here("FigS8.pdf"), plot = FigS_STbw, device = "pdf", scale =1, width = 25, height = 15, units = "cm", dpi = 300)
+ggsave(here("FigS9.pdf"), plot = FigS_STbw, device = "pdf", scale =1, width = 25, height = 15, units = "cm", dpi = 300)
 
