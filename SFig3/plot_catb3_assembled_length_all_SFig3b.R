@@ -16,7 +16,7 @@ library(here)
 
 
 catb3_card_df <-
-  read_csv("SFig2/data-processed/catb3_card_assembly_stats.csv")
+  read_csv("SFig3/data-processed/catb3_card_assembly_stats.csv")
 
 catb3_card_df |>
   mutate(
@@ -46,9 +46,9 @@ catb3_card_df |>
     title = "Length/identity of assembled catB3 CARD",
     subtitle = "Length of full catB3 is 633; there are many assemblies at 442b",
     x = "sample"
-  ) -> FigS2b
+  ) -> FigS3b
 
-ggsave(here("SF2b_ariba-card-catb3-assemblystats.pdf"), width = 8, height = 5)
+ggsave(here("SF3b_ariba-card-catb3-assemblystats.pdf"), width = 8, height = 5)
 
 
 ### counts

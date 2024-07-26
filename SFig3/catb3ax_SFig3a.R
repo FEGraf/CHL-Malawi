@@ -13,10 +13,10 @@ library(here)
 # UPDATE 13 Sept 2023 - added klebs to ax
 
 df_srst2_ecoli <-
-  read_csv(here("SFig2/data-raw/ariba_srst2_summary07092022.csv"))
+  read_csv(here("SFig3/data-raw/ariba_srst2_summary07092022.csv"))
 
 df_srst2_kleb <-
-  read_csv(here("SFig2/data-raw/ariba-srst2-summary-dassim-musciha-kleb.csv"))
+  read_csv(here("SFig3/data-raw/ariba-srst2-summary-dassim-musciha-kleb.csv"))
 
 
 
@@ -86,9 +86,9 @@ left_join(
   theme(legend.text = element_text(face = "italic")) +
   theme(strip.background = element_rect(fill = "#f7fcfd")) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  labs(title = "ARIBA assembly flag for cat genes using SRST2") -> FigS2a
+  labs(title = "ARIBA assembly flag for cat genes using SRST2") -> FigS3a
 
-ggsave(here("SF2a_ariba-srst2-assembly.pdf"), FigS2a, width = 8, height = 4)
+ggsave(here("SF3a_ariba-srst2-assembly.pdf"), FigS3a, width = 8, height = 4)
 
 
 
@@ -96,10 +96,10 @@ ggsave(here("SF2a_ariba-srst2-assembly.pdf"), FigS2a, width = 8, height = 4)
 # card
 
 df_card_ecoli <-
-  read_csv(here("SFig2/data-raw/ariba_card_summary07092022.csv"))
+  read_csv(here("SFig3/data-raw/ariba_card_summary07092022.csv"))
 
 df_card_kleb <-
-  read_csv(here("SFig2/data-raw/ariba-card-kleb-summary-dassim-musicha.csv"))
+  read_csv(here("SFig3/data-raw/ariba-card-kleb-summary-dassim-musicha.csv"))
 
 
 left_join(

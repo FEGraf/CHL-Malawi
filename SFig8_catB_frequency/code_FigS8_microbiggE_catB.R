@@ -13,12 +13,12 @@ library(ggpubr)
 
 ### load data
 
-full_catB3 <- read.csv(here("SFig7_catB_frequency/microbigge_catB3_230804.csv"))
+full_catB3 <- read.csv(here("SFig8_catB_frequency/microbigge_catB3_230804.csv"))
 
 
 ### FigS7a  - counts of catB3 vs coverage of reference, n = 46667
 
-FigS7a <- ggplot(full_catB3, aes(x=X..Coverage.of.reference))+
+FigS8a <- ggplot(full_catB3, aes(x=X..Coverage.of.reference))+
   geom_bar()+
   #scale_y_log10()+
   #facet_wrap(vars(X.Scientific.name), scales = "free_y", shrink = TRUE)+
@@ -27,13 +27,13 @@ FigS7a <- ggplot(full_catB3, aes(x=X..Coverage.of.reference))+
   theme(strip.text = element_text(face = 'italic'))+
   labs(x = "Coverage of reference (%)", y = "Counts")
 
-FigS7a
+FigS8a
 
 # Code from Joe Lewis from here ---------------------------------------------------
 # janitor package  to clean var names
 library(janitor)
 
-FigS7b <- full_catB3 %>%
+FigS8b <- full_catB3 %>%
   janitor::clean_names() %>% # tidies up your var names
   mutate(
     year = str_extract(collection_date, "^\\d{4}"),
@@ -70,11 +70,11 @@ labs(title = "Proportion of samples with IS26 truncated catB3",
   xlab("Year")+
   ylab("Proportion of IS26 truncated catB3")
 
-FigS7b
+FigS8b
 
 # species ------------------------------------------------------
 
-FigS7c <- full_catB3 %>%
+FigS8c <- full_catB3 %>%
   janitor::clean_names() %>% # tidies up your var names
   mutate(
     year = str_extract(collection_date, "^\\d{4}"),
@@ -117,12 +117,12 @@ FigS7c <- full_catB3 %>%
   theme(axis.text.y = element_text(face = "italic"))+
   coord_flip()
 
-FigS7c
+FigS8c
 
 
 # isolate source (host) -------------------------------
 
-FigS7d <-   
+FigS8d <-   
   full_catB3 %>%
   janitor::clean_names() %>% # tidies up your var names
   mutate(
@@ -179,13 +179,13 @@ FigS7d <-
   ylab("Proportion of truncated catB3")+
   coord_flip()
 
-FigS7d
+FigS8d
 
 
 
 # country ------------------------------------------------------
 
-FigS7e <- full_catB3 %>%
+FigS8e <- full_catB3 %>%
   janitor::clean_names() %>% # tidies up your var names
   mutate(
     year = str_extract(collection_date, "^\\d{4}"),
@@ -231,22 +231,22 @@ FigS7e <- full_catB3 %>%
   ylab("Proportion of truncated catB3")+
   coord_flip()
 
-FigS7e
+FigS8e
 
 ############## arrange figures ################
 
-FigS7.final <- ggarrange(FigS7a, FigS7b, FigS7c, FigS7d, FigS7e,
+FigS8.final <- ggarrange(FigS8a, FigS8b, FigS8c, FigS8d, FigS8e,
                         ncol = 2, nrow = 3,  labels = c( "a", "b", "c", "d", "e"),
                         heights = c(8, 8, 16))
 
                         
-FigS7.final
+FigS8.final
 
 #save figures: 
-ggsave(here("FigS7.final.pdf"), plot = FigS7.final, scale =1, width = 30, height = 42, units = "cm", dpi = 300)
+ggsave(here("FigS8.final.pdf"), plot = FigS8.final, scale =1, width = 30, height = 42, units = "cm", dpi = 300)
 
-ggsave(here("FigS7.final.png"), plot = FigS7.final, device = "png", scale =1, width = 30, height = 42, units = "cm", dpi = 300)
+ggsave(here("FigS8.final.png"), plot = FigS8.final, device = "png", scale =1, width = 30, height = 42, units = "cm", dpi = 300)
 
-ggsave(here("FigS7.final.tiff"), plot = FigS7.final, device = "tiff", scale =1, width = 30, height = 42, units = "cm", dpi = 300)
+ggsave(here("FigS8.final.tiff"), plot = FigS8.final, device = "tiff", scale =1, width = 30, height = 42, units = "cm", dpi = 300)
 
 
