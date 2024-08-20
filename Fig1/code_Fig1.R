@@ -126,3 +126,5 @@ ggsave(here("Figure1.tiff"), plot = Fig1_MS, device = "tiff", scale =1, width = 
 ggsave(here("Figure1.png"), plot = Fig1_MS, device = "png", scale =1, width = 25, height = 21, units = "cm", dpi = 300)
 
 ggsave("Figure1.pdf", plot = Fig1_MS, device = "pdf", scale =1, width = 25, height = 21, units = "cm", dpi = 300)
+
+ggsave("Figure1.svg", plot = Fig1_MS, device = "svg", scale =1, width = 25, height = 21, units = "cm")

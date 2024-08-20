@@ -99,6 +99,8 @@ f5.plot
 
 ```{r}
 ggsave(here("Fig5.png"), plot = f5.plot, height = 18, width = 32, units = "cm", dpi = 300)
+
+ggsave(here("Fig5.svg"), plot = f5.plot, height = 18, width = 32, units = "cm")
 #ggsave("Fig5.png", plot = f5.plot)
 ```
 
