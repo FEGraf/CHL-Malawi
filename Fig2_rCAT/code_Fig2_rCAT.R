@@ -46,3 +46,5 @@ Fig2_final
 
 
 ggsave(here("Figure2.pdf"), plot = Fig2_final, device = "pdf", scale =1, width = 20, height = 25, units = "cm", dpi = 300)
+
+ggsave(here("Figure2.svg"), plot = Fig2_final, device = "svg", scale =1, width = 20, height = 25, units = "cm")

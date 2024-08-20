@@ -531,6 +531,7 @@ rownames(comat_pheatmap) = gsub("catB3_2", "catB3", rownames(comat_pheatmap))
 
 diag(comat_pheatmap) = 2
 
+
 pheatmap(mat = comat_pheatmap,
          color = c("#FFCC66", "dark gray", "light blue", "white"),
          cluster_cols = TRUE, 
@@ -541,6 +542,7 @@ pheatmap(mat = comat_pheatmap,
          fontsize = 10, 
          legend_breaks = c(-1, 0, 1, 2),
          legend_labels = c("negative", "random", "positive", "same gene"))
+
 
 ```
 
@@ -636,7 +638,14 @@ exp_cooccur <- ptab$exp_cooccur
 obs_cooccur <- ptab$obs_cooccur
 signs <- ptab$signs
 
-
+ptab <-
+  ptab |>
+  mutate(
+    sp2_name =
+      if_else(sp2_name == "catA1" & sp1_name == "catB3", "catB3", sp2_name),
+    sp1_name =
+      if_else(sp2_name == "catB3" & sp1_name == "catB3", "catA1", sp1_name)
+  )
 
 # _______________________
 # Plotting with white background 
@@ -662,6 +671,8 @@ p <- p + theme(plot.title = element_text(vjust = 2,
 p <- p + ggtitle("Co-occurrence across select genes") 
 
 p
+
+ggsave(here("Fig4.svg"), width = 9, height = 8)
 
 ```
 
